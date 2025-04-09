@@ -141,8 +141,8 @@ function showNextCard() {
     // Resize text to fit container
     resizeText(cardFront);
     
-    // Update timer duration
-    timer.style.setProperty('--duration', settings.flipTime);
+    // Update timer duration - use half the time for each phase
+    timer.style.setProperty('--duration', settings.flipTime / 2);
     
     // If we were paused, stay paused
     if (isPaused) {
@@ -150,8 +150,8 @@ function showNextCard() {
         return;
     }
     
-    // Start the first timer (question phase) - first half of animation
-    flipTimer = startTimer(settings.flipTime, () => {
+    // Start the first timer (question phase) - 5 seconds
+    flipTimer = startTimer(settings.flipTime / 2, () => {
         // Reveal the answer
         cardBack.classList.add('revealed');
         isShowingAnswer = true;
@@ -159,8 +159,8 @@ function showNextCard() {
         // Resize the answer text
         resizeText(cardBack);
         
-        // Start the second timer (answer phase) - second half of animation
-        nextCardTimer = startTimer(settings.flipTime, () => {
+        // Start the second timer (answer phase) - 5 seconds
+        nextCardTimer = startTimer(settings.flipTime / 2, () => {
             // Move to next card
             showNextCard();
         });
@@ -246,15 +246,15 @@ function togglePause() {
         
         // Restart appropriate timer based on current state
         if (isShowingAnswer) {
-            nextCardTimer = startTimer(settings.flipTime, () => {
+            nextCardTimer = startTimer(settings.flipTime / 2, () => {
                 showNextCard();
             });
         } else {
-            flipTimer = startTimer(settings.flipTime, () => {
+            flipTimer = startTimer(settings.flipTime / 2, () => {
                 cardBack.classList.add('revealed');
                 isShowingAnswer = true;
                 
-                nextCardTimer = startTimer(settings.flipTime, () => {
+                nextCardTimer = startTimer(settings.flipTime / 2, () => {
                     showNextCard();
                 });
             });
@@ -283,11 +283,11 @@ document.querySelector('.timer').addEventListener('dblclick', () => {
         // Resize the answer text
         resizeText(cardBack);
         
-        // Start the answer phase timer
+        // Start the answer phase timer - 5 seconds
         if (nextCardTimer) {
             clearTimeout(nextCardTimer);
         }
-        nextCardTimer = startTimer(settings.flipTime, () => {
+        nextCardTimer = startTimer(settings.flipTime / 2, () => {
             showNextCard();
         });
     }
