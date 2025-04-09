@@ -19,6 +19,7 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - Pure CSS circular timer animation that visualizes the countdown
 - Settings panel with customizable options
 - Persistent settings using localStorage
+- Fullscreen mode for distraction-free learning
 
 ### Technical Implementation Details
 

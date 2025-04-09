@@ -3,6 +3,7 @@ const cardFront = document.getElementById('cardFront');
 const cardBack = document.getElementById('cardBack');
 const timer = document.querySelector('.timer');
 const settingsToggle = document.getElementById('settingsToggle');
+const fullscreenToggle = document.getElementById('fullscreenToggle');
 const settingsPanel = document.getElementById('settingsPanel');
 const directionSelect = document.getElementById('direction');
 const flipTimeInput = document.getElementById('flipTime');
@@ -104,6 +105,49 @@ function showNextCard() {
 
 // Initialize first card
 showNextCard();
+
+// Fullscreen functionality
+fullscreenToggle.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        // Enter fullscreen
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+            document.documentElement.msRequestFullscreen();
+        }
+        fullscreenToggle.textContent = '⛶';
+        fullscreenToggle.classList.add('active');
+    } else {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+        fullscreenToggle.textContent = '⛶';
+        fullscreenToggle.classList.remove('active');
+    }
+});
+
+// Update fullscreen button when fullscreen state changes
+document.addEventListener('fullscreenchange', updateFullscreenButton);
+document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+
+function updateFullscreenButton() {
+    if (document.fullscreenElement) {
+        fullscreenToggle.textContent = '⛶';
+        fullscreenToggle.classList.add('active');
+    } else {
+        fullscreenToggle.textContent = '⛶';
+        fullscreenToggle.classList.remove('active');
+    }
+}
 
 // Allow clicking on the timer to manually advance
 document.querySelector('.timer').addEventListener('click', () => {
