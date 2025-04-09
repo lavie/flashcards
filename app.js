@@ -106,11 +106,11 @@ function showNextCard() {
     
     // Set content based on direction
     if (settings.direction === 'en-pt') {
-        cardFront.textContent = entry.english;
-        cardBack.textContent = entry.portuguese;
+        cardFront.textContent = entry.en;
+        cardBack.textContent = entry.pt;
     } else {
-        cardFront.textContent = entry.portuguese;
-        cardBack.textContent = entry.english;
+        cardFront.textContent = entry.pt;
+        cardBack.textContent = entry.en;
     }
     
     // Update timer duration
