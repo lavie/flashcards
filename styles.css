@@ -155,6 +155,8 @@ button:hover {
     padding: 20px;
     font-size: 96px;
     text-align: center;
+    word-wrap: break-word;
+    overflow: hidden;
 }
 
 .card-front {

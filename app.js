@@ -87,6 +87,28 @@ function startTimer(duration, callback) {
     return setTimeout(callback, duration * 1000);
 }
 
+// Function to resize text to fit container
+function resizeText(element) {
+    const maxFontSize = 96; // Starting font size
+    const minFontSize = 24; // Minimum font size
+    const container = element;
+    const content = element.textContent;
+    
+    // Reset font size to maximum
+    container.style.fontSize = maxFontSize + 'px';
+    
+    // Check if content overflows
+    while (
+        (container.scrollHeight > container.clientHeight || 
+         container.scrollWidth > container.clientWidth) && 
+        parseInt(window.getComputedStyle(container).fontSize) > minFontSize
+    ) {
+        // Reduce font size by 2px until it fits
+        const currentSize = parseInt(window.getComputedStyle(container).fontSize);
+        container.style.fontSize = (currentSize - 2) + 'px';
+    }
+}
+
 // Show next card
 function showNextCard() {
     // Clear any existing timers
@@ -116,6 +138,9 @@ function showNextCard() {
         cardBack.textContent = entry.en;
     }
     
+    // Resize text to fit container
+    resizeText(cardFront);
+    
     // Update timer duration
     timer.style.setProperty('--duration', settings.flipTime);
     
@@ -130,6 +155,9 @@ function showNextCard() {
         // Reveal the answer
         cardBack.classList.add('revealed');
         isShowingAnswer = true;
+        
+        // Resize the answer text
+        resizeText(cardBack);
         
         // Start the second timer (answer phase)
         nextCardTimer = startTimer(settings.flipTime, () => {
@@ -251,6 +279,9 @@ document.querySelector('.timer').addEventListener('dblclick', () => {
         }
         cardBack.classList.add('revealed');
         isShowingAnswer = true;
+        
+        // Resize the answer text
+        resizeText(cardBack);
         
         // Start the answer phase timer
         if (nextCardTimer) {
