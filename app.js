@@ -143,6 +143,81 @@ function resizeText(element) {
     }
 }
 
+// Helper function to format English prompts for conjugated verbs
+function formatEnglishPrompt(infinitive, tense, person) {
+    // Remove "to " from the beginning of the English infinitive
+    const baseVerb = infinitive.startsWith('to ') ? infinitive.substring(3) : infinitive;
+    
+    // Handle multiple translations (e.g., "to think, to find")
+    const firstVerb = baseVerb.split(',')[0].trim();
+    
+    // Map Portuguese person to English pronoun
+    const pronounMap = {
+        'eu': 'I',
+        'tu': 'you',
+        'ele_ela_você': 'he/she/you',
+        'nós': 'we',
+        'eles_elas_vocês': 'they/you all'
+    };
+    
+    const pronoun = pronounMap[person] || person;
+    
+    // Format based on tense
+    switch(tense) {
+        case 'present':
+            if (person === 'eu') {
+                return `${pronoun} ${firstVerb}`;
+            } else if (person === 'ele_ela_você') {
+                return `${pronoun} ${firstVerb}s`;
+            } else {
+                return `${pronoun} ${firstVerb}`;
+            }
+        case 'preterite':
+            // Check for irregular past tense
+            const irregularPast = getIrregularEnglishPastForm(firstVerb);
+            if (irregularPast) {
+                return `${pronoun} ${irregularPast}`;
+            }
+            
+            // Regular past tense in English
+            if (firstVerb.endsWith('e')) {
+                return `${pronoun} ${firstVerb}d`;
+            } else {
+                return `${pronoun} ${firstVerb}ed`;
+            }
+        case 'future':
+            return `${pronoun} will ${firstVerb}`;
+        default:
+            return `${pronoun} ${firstVerb}`;
+    }
+}
+
+// Function to handle irregular English past tense verbs
+function getIrregularEnglishPastForm(verb) {
+    const irregularVerbs = {
+        'be': 'was/were',
+        'go': 'went',
+        'do': 'did',
+        'have': 'had',
+        'say': 'said',
+        'make': 'made',
+        'know': 'knew',
+        'take': 'took',
+        'see': 'saw',
+        'come': 'came',
+        'think': 'thought',
+        'find': 'found',
+        'give': 'gave',
+        'tell': 'told',
+        'get': 'got',
+        'put': 'put',
+        'leave': 'left',
+        'feel': 'felt'
+    };
+    
+    return irregularVerbs[verb] || null;
+}
+
 // Show next card
 function showNextCard() {
     // Clear any existing timers
@@ -163,24 +238,78 @@ function showNextCard() {
     const randomIndex = Math.floor(Math.random() * dictionary.length);
     const entry = dictionary[randomIndex];
     
-    // Set content based on direction
-    if (settings.direction === 'random') {
-        // Randomly choose direction for this card
-        const randomDirection = Math.random() < 0.5 ? 'en-pt' : 'pt-en';
-        if (randomDirection === 'en-pt') {
-            cardFront.textContent = entry.en;
-            cardBack.textContent = entry.pt;
-        } else {
-            cardFront.textContent = entry.pt;
-            cardBack.textContent = entry.en;
-        }
-    } else if (settings.direction === 'en-pt') {
-        cardFront.textContent = entry.en;
-        cardBack.textContent = entry.pt;
+    // Determine which content type to show
+    let selectedContentType;
+    if (settings.contentTypes.length === 1) {
+        // If only one content type is selected, use that
+        selectedContentType = settings.contentTypes[0];
     } else {
-        cardFront.textContent = entry.pt;
-        cardBack.textContent = entry.en;
+        // If multiple content types are selected, choose one randomly
+        selectedContentType = settings.contentTypes[Math.floor(Math.random() * settings.contentTypes.length)];
     }
+    
+    let frontText, backText;
+    
+    if (selectedContentType === 'infinitive') {
+        // Handle infinitive form (original behavior)
+        if (settings.direction === 'random') {
+            // Randomly choose direction for this card
+            const randomDirection = Math.random() < 0.5 ? 'en-pt' : 'pt-en';
+            if (randomDirection === 'en-pt') {
+                frontText = entry.en;
+                backText = entry.pt;
+            } else {
+                frontText = entry.pt;
+                backText = entry.en;
+            }
+        } else if (settings.direction === 'en-pt') {
+            frontText = entry.en;
+            backText = entry.pt;
+        } else {
+            frontText = entry.pt;
+            backText = entry.en;
+        }
+    } else {
+        // Handle conjugated forms
+        const tense = selectedContentType; // 'present', 'preterite', or 'future'
+        
+        // Get conjugations for this verb
+        const verbConjugations = getConjugations(entry.pt);
+        if (!verbConjugations || !verbConjugations[tense]) {
+            // Skip this verb and try another one
+            showNextCard();
+            return;
+        }
+        
+        // Choose a random person
+        const persons = Object.keys(verbConjugations[tense]);
+        const randomPerson = persons[Math.floor(Math.random() * persons.length)];
+        
+        // Get the conjugated form
+        const conjugatedForm = verbConjugations[tense][randomPerson];
+        
+        // Format the display text
+        if (settings.direction === 'random') {
+            // Randomly choose direction for this card
+            const randomDirection = Math.random() < 0.5 ? 'en-pt' : 'pt-en';
+            if (randomDirection === 'en-pt') {
+                frontText = formatEnglishPrompt(entry.en, tense, randomPerson);
+                backText = `${randomPerson} ${conjugatedForm}`;
+            } else {
+                frontText = `${randomPerson} ${conjugatedForm}`;
+                backText = formatEnglishPrompt(entry.en, tense, randomPerson);
+            }
+        } else if (settings.direction === 'en-pt') {
+            frontText = formatEnglishPrompt(entry.en, tense, randomPerson);
+            backText = `${randomPerson} ${conjugatedForm}`;
+        } else {
+            frontText = `${randomPerson} ${conjugatedForm}`;
+            backText = formatEnglishPrompt(entry.en, tense, randomPerson);
+        }
+    }
+    
+    cardFront.textContent = frontText;
+    cardBack.textContent = backText;
     
     // Resize text to fit container
     resizeText(cardFront);
