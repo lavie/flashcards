@@ -182,16 +182,19 @@ button:hover {
     transform: translateX(-50%);
     width: 40px;
     height: 40px;
-    background: -webkit-linear-gradient(left, var(--timer-color-1) 50%, var(--timer-color-2) 50%);
-    border-radius: 100%;
-    -webkit-animation: time calc(var(--duration) * 2s) linear infinite;
+    border-radius: 50%;
+    border: 4px solid var(--timer-color-2);
+    border-top: 4px solid var(--timer-color-1);
+    -webkit-animation: spin calc(var(--duration) * 1s) linear infinite;
+    animation: spin calc(var(--duration) * 1s) linear infinite;
     -webkit-animation-play-state: running;
-    transition: background 0.3s ease;
+    animation-play-state: running;
     cursor: pointer;
 }
 
 .timer.paused {
     -webkit-animation-play-state: paused;
+    animation-play-state: paused;
 }
 
 .timer-icon {
@@ -204,10 +207,8 @@ button:hover {
     background-color: var(--timer-icon-bg);
     border-radius: 50%;
     z-index: 2;
-    -webkit-mask-image: none;
-    mask-image: none;
     opacity: 1;
-    transition: opacity 0.2s ease, background-color 0.3s ease, background-image 0.2s ease;
+    transition: background-color 0.3s ease, background-image 0.2s ease;
     background-image: url('pause.svg');
     background-repeat: no-repeat;
     background-position: center;
@@ -218,51 +219,12 @@ button:hover {
     background-image: url('play.svg');
 }
 
-.timer:hover .timer-icon {
-    opacity: 1;
+@-webkit-keyframes spin {
+    0% { -webkit-transform: translateX(-50%) rotate(0deg); }
+    100% { -webkit-transform: translateX(-50%) rotate(360deg); }
 }
 
-.timer.paused .timer-icon {
-    opacity: 1;
-}
-
-.timer-mask {
-    border-radius: 100% 0 0 100% / 50% 0 0 50%;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 50%;
-    -webkit-animation: mask calc(var(--duration) * 2s) steps(1000, start) infinite;
-    -webkit-animation-play-state: running;
-    -webkit-transform-origin: 100% 50%;
-}
-
-.timer.paused .timer-mask {
-    -webkit-animation-play-state: paused;
-}
-
-@-webkit-keyframes time {
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-
-@-webkit-keyframes mask {
-    0% {
-        background: var(--timer-color-2);
-        -webkit-transform: rotate(0deg);
-    }
-    49.99% {
-        background: var(--timer-color-2);
-        -webkit-transform: rotate(-180deg);
-    }
-    50% {
-        background: var(--timer-color-1);
-        -webkit-transform: rotate(-180deg);
-    }
-    100% {
-        background: var(--timer-color-1);
-        -webkit-transform: rotate(-360deg);
-    }
+@keyframes spin {
+    0% { transform: translateX(-50%) rotate(0deg); }
+    100% { transform: translateX(-50%) rotate(360deg); }
 }
