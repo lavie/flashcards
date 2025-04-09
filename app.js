@@ -143,7 +143,74 @@ function resizeText(element) {
     }
 }
 
-// Helper function to format English prompts for conjugated verbs
+// Helper function to format English prompts for conjugated verbs with a specific person
+function formatEnglishPromptWithSpecificPerson(infinitive, tense, person, specificPerson) {
+    // Remove "to " from the beginning of the English infinitive
+    const baseVerb = infinitive.startsWith('to ') ? infinitive.substring(3) : infinitive;
+    
+    // Handle multiple translations (e.g., "to think, to find")
+    const firstVerb = baseVerb.split(',')[0].trim();
+    
+    // Use the specific person provided
+    let pronoun;
+    if (person === 'eu') {
+        pronoun = 'I';
+    } else if (person === 'tu') {
+        pronoun = 'you';
+    } else if (person === 'nós') {
+        pronoun = 'we';
+    } else if (person === 'ele_ela_você' || person === 'eles_elas_vocês') {
+        // Use the specific person that was selected
+        pronoun = specificPerson;
+    } else {
+        pronoun = person; // Fallback
+    }
+    
+    // Format based on tense
+    switch(tense) {
+        case 'present':
+            if (person === 'eu') {
+                return `${pronoun} ${firstVerb}`;
+            } else if (person === 'ele_ela_você') {
+                // Third person singular in English adds 's'
+                if (specificPerson === 'he' || specificPerson === 'she') {
+                    return `${pronoun} ${firstVerb}s`;
+                } else {
+                    return `${pronoun} ${firstVerb}`;
+                }
+            } else {
+                return `${pronoun} ${firstVerb}`;
+            }
+        case 'preterite':
+            // Check for irregular past tense
+            const irregularPast = getIrregularEnglishPastForm(firstVerb);
+            if (irregularPast) {
+                // Handle special case for "be" verb
+                if (firstVerb === 'be') {
+                    if (specificPerson === 'I' || specificPerson === 'he' || 
+                        specificPerson === 'she' || specificPerson === 'it') {
+                        return `${pronoun} was`;
+                    } else {
+                        return `${pronoun} were`;
+                    }
+                }
+                return `${pronoun} ${irregularPast}`;
+            }
+            
+            // Regular past tense in English
+            if (firstVerb.endsWith('e')) {
+                return `${pronoun} ${firstVerb}d`;
+            } else {
+                return `${pronoun} ${firstVerb}ed`;
+            }
+        case 'future':
+            return `${pronoun} will ${firstVerb}`;
+        default:
+            return `${pronoun} ${firstVerb}`;
+    }
+}
+
+// Helper function to format English prompts for conjugated verbs (original function kept for compatibility)
 function formatEnglishPrompt(infinitive, tense, person) {
     // Remove "to " from the beginning of the English infinitive
     const baseVerb = infinitive.startsWith('to ') ? infinitive.substring(3) : infinitive;
@@ -199,7 +266,7 @@ function formatEnglishPrompt(infinitive, tense, person) {
 // Function to handle irregular English past tense verbs
 function getIrregularEnglishPastForm(verb) {
     const irregularVerbs = {
-        'be': 'was/were',
+        'be': 'was',
         'go': 'went',
         'do': 'did',
         'have': 'had',
@@ -292,33 +359,49 @@ function showNextCard() {
         // Get the conjugated form
         const conjugatedForm = verbConjugations[tense][randomPerson];
         
-        // Format the Portuguese person display
+        // Format the Portuguese person display and ensure consistent person selection
         let displayPerson = randomPerson;
+        let englishPerson = randomPerson; // Use the same person for both languages
+        
+        // Choose a specific person from the group (ele/ela/você or eles/elas/vocês)
         if (randomPerson === 'ele_ela_você') {
             const options = ['ele', 'ela', 'você'];
-            displayPerson = options[Math.floor(Math.random() * options.length)];
+            const selectedIndex = Math.floor(Math.random() * options.length);
+            displayPerson = options[selectedIndex];
+            
+            // Map the Portuguese person to the corresponding English pronoun
+            const englishOptions = ['he', 'she', 'you'];
+            englishPerson = englishOptions[selectedIndex]; // Use same index for consistency
         } else if (randomPerson === 'eles_elas_vocês') {
             const options = ['eles', 'elas', 'vocês'];
-            displayPerson = options[Math.floor(Math.random() * options.length)];
+            const selectedIndex = Math.floor(Math.random() * options.length);
+            displayPerson = options[selectedIndex];
+            
+            // Map the Portuguese person to the corresponding English pronoun
+            const englishOptions = ['they', 'they', 'you all'];
+            englishPerson = englishOptions[selectedIndex]; // Use same index for consistency
         }
+        
+        // Create the English prompt with the specific person
+        const englishPrompt = formatEnglishPromptWithSpecificPerson(entry.en, tense, randomPerson, englishPerson);
         
         // Format the display text
         if (settings.direction === 'random') {
             // Randomly choose direction for this card
             const randomDirection = Math.random() < 0.5 ? 'en-pt' : 'pt-en';
             if (randomDirection === 'en-pt') {
-                frontText = formatEnglishPrompt(entry.en, tense, randomPerson);
+                frontText = englishPrompt;
                 backText = `${displayPerson} ${conjugatedForm}`;
             } else {
                 frontText = `${displayPerson} ${conjugatedForm}`;
-                backText = formatEnglishPrompt(entry.en, tense, randomPerson);
+                backText = englishPrompt;
             }
         } else if (settings.direction === 'en-pt') {
-            frontText = formatEnglishPrompt(entry.en, tense, randomPerson);
+            frontText = englishPrompt;
             backText = `${displayPerson} ${conjugatedForm}`;
         } else {
             frontText = `${displayPerson} ${conjugatedForm}`;
-            backText = formatEnglishPrompt(entry.en, tense, randomPerson);
+            backText = englishPrompt;
         }
     }
     
