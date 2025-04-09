@@ -32,6 +32,7 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
   - Visual indicator showing time remaining before card flip
   - Implemented using pure CSS animations (no JavaScript timers for the visual effect)
   - Completes one full rotation during question phase, then another during answer phase
+  - Features play/pause button with toggle between pause and play icons
 - **Settings Panel**: 
   - Accessible via gear icon in top-right corner
   - Allows changing translation direction (EN→PT or PT→EN)
@@ -43,7 +44,8 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 3. After the set time elapses, the translation is revealed
 4. Timer continues for the same duration to allow reading the answer
 5. Process repeats with a new random verb
-6. User can click the timer to manually advance at any point
+6. User can click the timer to pause/resume the countdown (icon toggles between pause/play)
+7. Double-click the timer to manually advance to the next step
 
 #### Technical Architecture
 - **HTML/CSS/JavaScript**: No framework dependencies for maximum simplicity
@@ -70,7 +72,7 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - **CSS**: Modern CSS with animations, flexbox layout, and CSS variables for theming
 - **JavaScript**: Vanilla JS with event listeners and timeout management
 - **Data Management**: Vocabulary stored in a separate data.js file for easy expansion
-- **Animation**: CSS-based circular timer using webkit keyframes and transforms
+- **Animation**: CSS-based circular timer using webkit keyframes and transforms with interactive pause/play functionality
 - **Settings**: User preferences stored in localStorage as JSON
 
 ## Deployment
