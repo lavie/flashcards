@@ -9,13 +9,18 @@ const directionSelect = document.getElementById('direction');
 const flipTimeInput = document.getElementById('flipTime');
 const flipTimeValue = document.getElementById('flipTimeValue');
 const themeSelect = document.getElementById('theme');
+const contentTypeSelect = document.getElementById('contentType');
+const personSettingContainer = document.getElementById('personSettingContainer');
+const personSelect = document.getElementById('person');
 const applySettingsButton = document.getElementById('applySettings');
 
 // App State
 let settings = {
     direction: 'en-pt',
     flipTime: 10,
-    theme: 'system'
+    theme: 'system',
+    contentType: 'infinitive',
+    person: 'random'
 };
 
 // Timer state
@@ -31,6 +36,12 @@ if (localStorage.getItem('flashcardSettings')) {
     // Set theme or default to 'system' if not previously set
     settings.theme = settings.theme || 'system';
     themeSelect.value = settings.theme;
+    
+    // Set content type and person or default if not previously set
+    settings.contentType = settings.contentType || 'infinitive';
+    settings.person = settings.person || 'random';
+    contentTypeSelect.value = settings.contentType;
+    personSelect.value = settings.person;
 }
 
 // Apply theme based on settings
@@ -72,6 +83,8 @@ applySettingsButton.addEventListener('click', () => {
     settings.direction = directionSelect.value;
     settings.flipTime = parseInt(flipTimeInput.value);
     settings.theme = themeSelect.value;
+    settings.contentType = contentTypeSelect.value;
+    settings.person = personSelect.value;
     
     // Apply theme
     applyTheme(settings.theme);
@@ -88,6 +101,20 @@ applySettingsButton.addEventListener('click', () => {
     // Reset current card
     showNextCard();
 });
+
+// Toggle person setting visibility based on content type
+contentTypeSelect.addEventListener('change', () => {
+    if (contentTypeSelect.value === 'infinitive') {
+        personSettingContainer.style.display = 'none';
+    } else {
+        personSettingContainer.style.display = 'block';
+    }
+});
+
+// Initialize person setting visibility
+if (settings.contentType === 'infinitive') {
+    personSettingContainer.style.display = 'none';
+}
 
 // Helper function to start a timer and execute callback when done
 function startTimer(duration, callback) {

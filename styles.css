@@ -114,6 +114,7 @@ body {
 
 .setting {
     margin-bottom: 15px;
+    transition: opacity 0.3s ease;
 }
 
 .setting label {

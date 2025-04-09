@@ -34,6 +34,27 @@
                     <option value="dark">Dark</option>
                 </select>
             </div>
+            <div class="setting">
+                <label for="contentType">Content Type:</label>
+                <select id="contentType">
+                    <option value="infinitive">Infinitives Only</option>
+                    <option value="present">Present Tense</option>
+                    <option value="preterite">Past Tense (Preterite)</option>
+                    <option value="future">Future Tense</option>
+                    <option value="mixed">Mixed (All Forms)</option>
+                </select>
+            </div>
+            <div class="setting" id="personSettingContainer">
+                <label for="person">Person:</label>
+                <select id="person">
+                    <option value="random">All (Random)</option>
+                    <option value="eu">First Person (eu)</option>
+                    <option value="tu">Second Person (tu)</option>
+                    <option value="ele_ela_você">Third Person (ele/ela/você)</option>
+                    <option value="nós">First Person Plural (nós)</option>
+                    <option value="eles_elas_vocês">Third Person Plural (eles/elas/vocês)</option>
+                </select>
+            </div>
             <button id="applySettings">Apply</button>
         </div>
         
