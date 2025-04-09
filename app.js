@@ -1,7 +1,7 @@
 // DOM Elements
 const cardFront = document.getElementById('cardFront');
 const cardBack = document.getElementById('cardBack');
-const timerProgress = document.getElementById('timerProgress');
+const timer = document.querySelector('.timer');
 const settingsToggle = document.getElementById('settingsToggle');
 const settingsPanel = document.getElementById('settingsPanel');
 const directionSelect = document.getElementById('direction');
@@ -26,10 +26,7 @@ let flipTimer;
 let nextCardTimer;
 let isShowingAnswer = false;
 
-// Timer animation
-const TIMER_CIRCUMFERENCE = 2 * Math.PI * 16; // 2πr where r=16 (from SVG)
-timerProgress.style.strokeDasharray = TIMER_CIRCUMFERENCE;
-timerProgress.style.strokeDashoffset = TIMER_CIRCUMFERENCE;
+// Timer animation is now handled by CSS
 
 // Toggle settings panel
 settingsToggle.addEventListener('click', () => {
@@ -47,28 +44,16 @@ applySettingsButton.addEventListener('click', () => {
     // Hide settings panel
     settingsPanel.classList.remove('active');
     
+    // Update timer duration
+    timer.style.setProperty('--duration', settings.flipTime);
+    
     // Reset current card
     showNextCard();
 });
 
-// Start timer animation
-function startTimerAnimation(duration, callback) {
-    // Calculate values
-    const totalTime = duration * 1000;
-    
-    // Reset the circle to starting position (empty)
-    timerProgress.style.transition = 'none';
-    timerProgress.style.strokeDasharray = TIMER_CIRCUMFERENCE;
-    timerProgress.style.strokeDashoffset = TIMER_CIRCUMFERENCE;
-    
-    // Force reflow to make sure the transition is reset
-    void timerProgress.offsetWidth;
-    
-    // Start the animation
-    timerProgress.style.transition = `stroke-dashoffset ${totalTime}ms linear`;
-    timerProgress.style.strokeDashoffset = '0';
-    
-    return setTimeout(callback, totalTime);
+// Helper function to start a timer and execute callback when done
+function startTimer(duration, callback) {
+    return setTimeout(callback, duration * 1000);
 }
 
 // Show next card
@@ -100,14 +85,17 @@ function showNextCard() {
         cardBack.textContent = entry.english;
     }
     
-    // Start the first timer animation (question phase)
-    flipTimer = startTimerAnimation(settings.flipTime, () => {
+    // Update timer duration
+    timer.style.setProperty('--duration', settings.flipTime);
+    
+    // Start the first timer (question phase)
+    flipTimer = startTimer(settings.flipTime, () => {
         // Reveal the answer
         cardBack.classList.add('revealed');
         isShowingAnswer = true;
         
-        // Start the second timer animation (answer phase)
-        nextCardTimer = startTimerAnimation(settings.flipTime, () => {
+        // Start the second timer (answer phase)
+        nextCardTimer = startTimer(settings.flipTime, () => {
             // Move to next card
             showNextCard();
         });
@@ -134,7 +122,7 @@ document.querySelector('.timer').addEventListener('click', () => {
         if (nextCardTimer) {
             clearTimeout(nextCardTimer);
         }
-        nextCardTimer = startTimerAnimation(settings.flipTime, () => {
+        nextCardTimer = startTimer(settings.flipTime, () => {
             showNextCard();
         });
     }

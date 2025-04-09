@@ -114,21 +114,45 @@ button:hover {
     transform: translateX(-50%);
     width: 40px;
     height: 40px;
+    background: -webkit-linear-gradient(left, #4CAF50 50%, #ddd 50%);
+    border-radius: 100%;
+    -webkit-animation: time calc(var(--duration) * 1s) steps(1000, start) infinite;
+    -webkit-mask: radial-gradient(transparent 50%, #000 50%);
+    mask: radial-gradient(transparent 50%, #000 50%);
 }
 
-.timer-circle {
-    fill: none;
-    stroke-width: 3;
-    stroke-linecap: round;
+.timer-mask {
+    border-radius: 100% 0 0 100% / 50% 0 0 50%;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 50%;
+    -webkit-animation: mask calc(var(--duration) * 1s) steps(500, start) infinite;
+    -webkit-transform-origin: 100% 50%;
 }
 
-.timer-background {
-    stroke: #ddd;
+@-webkit-keyframes time {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
-.timer-progress {
-    stroke: #4CAF50;
-    transform-origin: center;
-    transform: rotate(-90deg);
-    transition: stroke-dashoffset linear;
+@-webkit-keyframes mask {
+    0% {
+        background: #ddd;
+        -webkit-transform: rotate(0deg);
+    }
+    50% {
+        background: #ddd;
+        -webkit-transform: rotate(-180deg);
+    }
+    50.01% {
+        background: #4CAF50;
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        background: #4CAF50;
+        -webkit-transform: rotate(-180deg);
+    }
 }
