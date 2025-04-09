@@ -191,44 +191,30 @@ button:hover {
     -webkit-animation-play-state: paused;
 }
 
-.timer::before {
-    content: "";
+.timer-icon {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 20px;
     height: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     border-radius: 50%;
     z-index: 2;
     opacity: 0;
     transition: opacity 0.2s ease;
-}
-
-.timer:hover::before {
-    opacity: 1;
-}
-
-.timer::after {
-    content: "⏸️";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: white;
-    z-index: 3;
-    opacity: 0;
-    transition: opacity 0.2s ease;
+    font-size: 12px;
 }
 
-.timer:hover::after {
+.timer:hover .timer-icon {
     opacity: 1;
 }
 
-.timer.paused::after {
-    content: "▶️";
+.timer.paused .timer-icon {
     opacity: 1;
 }
 
