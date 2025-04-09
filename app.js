@@ -10,8 +10,6 @@ const flipTimeInput = document.getElementById('flipTime');
 const flipTimeValue = document.getElementById('flipTimeValue');
 const themeSelect = document.getElementById('theme');
 const contentTypeCheckboxes = document.querySelectorAll('input[name="contentType"]');
-const personSettingContainer = document.getElementById('personSettingContainer');
-const personSelect = document.getElementById('person');
 const applySettingsButton = document.getElementById('applySettings');
 
 // App State
@@ -19,8 +17,7 @@ let settings = {
     direction: 'en-pt',
     flipTime: 10,
     theme: 'system',
-    contentTypes: ['infinitive'],
-    person: 'random'
+    contentTypes: ['infinitive']
 };
 
 // Timer state
@@ -45,9 +42,6 @@ if (localStorage.getItem('flashcardSettings')) {
         checkbox.checked = settings.contentTypes.includes(checkbox.value);
     });
     
-    // Set person or default if not previously set
-    settings.person = settings.person || 'random';
-    personSelect.value = settings.person;
 }
 
 // Apply theme based on settings
@@ -104,7 +98,6 @@ applySettingsButton.addEventListener('click', () => {
         document.getElementById('infinitiveCheck').checked = true;
     }
     
-    settings.person = personSelect.value;
     
     // Apply theme
     applyTheme(settings.theme);
@@ -122,22 +115,6 @@ applySettingsButton.addEventListener('click', () => {
     showNextCard();
 });
 
-// Toggle person setting visibility based on content types
-function updatePersonSettingVisibility() {
-    const hasConjugations = Array.from(contentTypeCheckboxes).some(checkbox => 
-        checkbox.checked && checkbox.value !== 'infinitive'
-    );
-    
-    personSettingContainer.style.display = hasConjugations ? 'block' : 'none';
-}
-
-// Add event listeners to all content type checkboxes
-contentTypeCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', updatePersonSettingVisibility);
-});
-
-// Initialize person setting visibility
-updatePersonSettingVisibility();
 
 // Helper function to start a timer and execute callback when done
 function startTimer(duration, callback) {
