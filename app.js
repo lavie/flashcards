@@ -7,6 +7,7 @@ const fullscreenToggle = document.getElementById('fullscreenToggle');
 const settingsPanel = document.getElementById('settingsPanel');
 const directionSelect = document.getElementById('direction');
 const flipTimeInput = document.getElementById('flipTime');
+const flipTimeValue = document.getElementById('flipTimeValue');
 const themeSelect = document.getElementById('theme');
 const applySettingsButton = document.getElementById('applySettings');
 
@@ -25,6 +26,7 @@ if (localStorage.getItem('flashcardSettings')) {
     settings = JSON.parse(localStorage.getItem('flashcardSettings'));
     directionSelect.value = settings.direction;
     flipTimeInput.value = settings.flipTime;
+    flipTimeValue.textContent = settings.flipTime;
     
     // Set theme or default to 'system' if not previously set
     settings.theme = settings.theme || 'system';
@@ -58,6 +60,11 @@ let isShowingAnswer = false;
 // Toggle settings panel
 settingsToggle.addEventListener('click', () => {
     settingsPanel.classList.toggle('active');
+});
+
+// Update flip time display when slider changes
+flipTimeInput.addEventListener('input', () => {
+    flipTimeValue.textContent = flipTimeInput.value;
 });
 
 // Apply settings
