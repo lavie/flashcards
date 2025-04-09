@@ -54,19 +54,18 @@ applySettingsButton.addEventListener('click', () => {
 // Start timer animation
 function startTimerAnimation(duration, callback) {
     // Reset timer state
-    let startTime = null;
     const totalTime = duration * 1000;
     
-    // Reset the circle
+    // Reset the circle to empty (full offset)
     timerProgress.style.transition = 'none';
     timerProgress.style.strokeDashoffset = TIMER_CIRCUMFERENCE;
     
     // Force reflow to make sure the transition is reset
     void timerProgress.offsetWidth;
     
-    // Start the animation
+    // Start the animation - animate from full offset (empty circle) to 0 offset (full circle)
     timerProgress.style.transition = `stroke-dashoffset ${totalTime}ms linear`;
-    timerProgress.style.strokeDashoffset = 0;
+    timerProgress.style.strokeDashoffset = '0';
     
     return setTimeout(callback, totalTime);
 }
