@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portuguese Flashcards</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="settings-toggle" id="settingsToggle">⚙️</div>
+        
+        <div class="settings-panel" id="settingsPanel">
+            <h3>Settings</h3>
+            <div class="setting">
+                <label for="direction">Direction:</label>
+                <select id="direction">
+                    <option value="en-pt">English → Portuguese</option>
+                    <option value="pt-en">Portuguese → English</option>
+                </select>
+            </div>
+            <div class="setting">
+                <label for="flipTime">Flip Time (seconds):</label>
+                <input type="number" id="flipTime" min="1" max="60" value="10">
+            </div>
+            <button id="applySettings">Apply</button>
+        </div>
+        
+        <div class="flashcard">
+            <div class="card-front" id="cardFront"></div>
+            <div class="card-back" id="cardBack"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="nextButton">Next Card</button>
+        </div>
+    </div>
+    
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
