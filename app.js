@@ -75,7 +75,7 @@ applySettingsButton.addEventListener('click', () => {
     // Hide settings panel
     settingsPanel.classList.remove('active');
     
-    // Update timer duration - each phase gets the full time
+    // Update timer duration
     timer.style.setProperty('--duration', settings.flipTime);
     
     // Reset current card
@@ -150,7 +150,7 @@ function showNextCard() {
         return;
     }
     
-    // Start the first timer (question phase) - full duration
+    // Start the first timer (question phase)
     flipTimer = startTimer(settings.flipTime, () => {
         // Reveal the answer
         cardBack.classList.add('revealed');
@@ -159,7 +159,7 @@ function showNextCard() {
         // Resize the answer text
         resizeText(cardBack);
         
-        // Start the second timer (answer phase) - full duration
+        // Start the second timer (answer phase)
         nextCardTimer = startTimer(settings.flipTime, () => {
             // Move to next card
             showNextCard();
