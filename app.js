@@ -186,12 +186,8 @@ function updateFullscreenButton() {
 }
 
 // Allow clicking on the timer to toggle pause or advance
-document.querySelector('.timer').addEventListener('click', (e) => {
-    // Toggle pause/play when clicking
-    if (e.target.classList.contains('timer') || e.target === document.querySelector('.timer::before') || e.target === document.querySelector('.timer::after')) {
-        togglePause();
-        return;
-    }
+document.querySelector('.timer').addEventListener('click', () => {
+    togglePause();
 });
 
 // Function to toggle pause state
