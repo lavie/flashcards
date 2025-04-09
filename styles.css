@@ -213,10 +213,14 @@ button:hover {
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    /* Counter-rotate to stay still while parent rotates */
+    animation: counter-spin calc(var(--duration) * 1s) linear infinite;
+    animation-play-state: running;
 }
 
 .timer.paused .timer-icon {
     background-image: url('play.svg');
+    animation-play-state: paused;
 }
 
 @-webkit-keyframes spin {
@@ -227,4 +231,9 @@ button:hover {
 @keyframes spin {
     0% { transform: translateX(-50%) rotate(0deg); }
     100% { transform: translateX(-50%) rotate(360deg); }
+}
+
+@keyframes counter-spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(-360deg); }
 }
