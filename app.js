@@ -164,7 +164,17 @@ function showNextCard() {
     const entry = dictionary[randomIndex];
     
     // Set content based on direction
-    if (settings.direction === 'en-pt') {
+    if (settings.direction === 'random') {
+        // Randomly choose direction for this card
+        const randomDirection = Math.random() < 0.5 ? 'en-pt' : 'pt-en';
+        if (randomDirection === 'en-pt') {
+            cardFront.textContent = entry.en;
+            cardBack.textContent = entry.pt;
+        } else {
+            cardFront.textContent = entry.pt;
+            cardBack.textContent = entry.en;
+        }
+    } else if (settings.direction === 'en-pt') {
         cardFront.textContent = entry.en;
         cardBack.textContent = entry.pt;
     } else {
