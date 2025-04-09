@@ -181,8 +181,6 @@ button:hover {
     border-radius: 100%;
     -webkit-animation: time calc(var(--duration) * 1s) steps(1000, start) infinite;
     -webkit-animation-play-state: running;
-    -webkit-mask: radial-gradient(transparent 50%, #000 50%);
-    mask: radial-gradient(transparent 50%, #000 50%);
     transition: background 0.3s ease;
     cursor: pointer;
 }
