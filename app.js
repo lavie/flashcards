@@ -7,12 +7,14 @@ const fullscreenToggle = document.getElementById('fullscreenToggle');
 const settingsPanel = document.getElementById('settingsPanel');
 const directionSelect = document.getElementById('direction');
 const flipTimeInput = document.getElementById('flipTime');
+const themeSelect = document.getElementById('theme');
 const applySettingsButton = document.getElementById('applySettings');
 
 // App State
 let settings = {
     direction: 'en-pt',
-    flipTime: 10
+    flipTime: 10,
+    theme: 'system'
 };
 
 // Load settings from localStorage if available
@@ -20,6 +22,27 @@ if (localStorage.getItem('flashcardSettings')) {
     settings = JSON.parse(localStorage.getItem('flashcardSettings'));
     directionSelect.value = settings.direction;
     flipTimeInput.value = settings.flipTime;
+    
+    // Set theme or default to 'system' if not previously set
+    settings.theme = settings.theme || 'system';
+    themeSelect.value = settings.theme;
+}
+
+// Apply theme based on settings
+applyTheme(settings.theme);
+
+// Function to apply theme
+function applyTheme(theme) {
+    if (theme === 'system') {
+        document.documentElement.classList.remove('dark-theme', 'light-theme');
+        document.documentElement.classList.add('system-theme');
+    } else if (theme === 'dark') {
+        document.documentElement.classList.remove('system-theme', 'light-theme');
+        document.documentElement.classList.add('dark-theme');
+    } else {
+        document.documentElement.classList.remove('system-theme', 'dark-theme');
+        document.documentElement.classList.add('light-theme');
+    }
 }
 
 // Timers
@@ -38,6 +61,10 @@ settingsToggle.addEventListener('click', () => {
 applySettingsButton.addEventListener('click', () => {
     settings.direction = directionSelect.value;
     settings.flipTime = parseInt(flipTimeInput.value);
+    settings.theme = themeSelect.value;
+    
+    // Apply theme
+    applyTheme(settings.theme);
     
     // Save to localStorage
     localStorage.setItem('flashcardSettings', JSON.stringify(settings));
