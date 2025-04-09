@@ -243,9 +243,6 @@ button:hover {
 }
 
 @-webkit-keyframes time {
-    50% {
-        -webkit-transform: rotate(180deg);
-    }
     100% {
         -webkit-transform: rotate(360deg);
     }
