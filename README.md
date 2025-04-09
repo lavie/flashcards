@@ -6,6 +6,29 @@ A minimalistic web app to help learn Portuguese (European) vocabulary through fl
 
 This app displays flashcards to help learn Portuguese vocabulary. It's designed to run unobtrusively in the background on a workstation or mobile device, showing vocabulary items at regular intervals.
 
+## Verb Conjugation Data
+
+The project includes a scraper to collect Portuguese verb conjugation data from Reverso Conjugator. The scraper uses Poetry for dependency management and Scrapy for web scraping.
+
+### Setting up the Scraper
+
+1. Install Poetry if you don't have it already:
+   ```bash
+   curl -sSL https://install.python-poetry.org | python3 -
+   ```
+
+2. Install the project dependencies:
+   ```bash
+   poetry install
+   ```
+
+3. Run the scraper to collect conjugation data:
+   ```bash
+   poetry run python scrape_conjugations.py
+   ```
+
+This will generate a `conjugations.json` file in the `conjugation_data` directory containing detailed conjugation information for the top 250 Portuguese verbs.
+
 ## Current Implementation Status
 
 The MVP (Minimum Viable Product) has been successfully implemented with the following features:
@@ -13,8 +36,9 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 ### Core Features (Implemented)
 - Simple flashcard system showing Portuguese verbs and their English translations
 - Cards flip automatically after a set time (configurable from 3-20 seconds)
-- Support for both EN-PT and PT-EN directions
+- Support for both EN-PT and PT-EN directions (including random direction option)
 - Random selection from a dictionary of common verbs
+- Verb conjugation support for different tenses (present, past, future)
 - Minimalistic interface that works well on mobile devices
 - Simple spinning timer animation that visualizes the countdown
 - Settings panel with customizable options
@@ -37,9 +61,14 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
   - Each phase (question and answer) gets equal time
 - **Settings Panel**: 
   - Accessible via gear icon in top-right corner
-  - Allows changing translation direction (EN→PT or PT→EN)
+  - Allows changing translation direction (EN→PT, PT→EN, or Random)
   - Mobile-friendly slider for customizable flip timing (3-20 seconds)
   - Theme selection (system default, light, or dark)
+  - Content type selection with checkboxes for:
+    - Infinitive forms
+    - Present tense conjugations
+    - Past tense (preterite) conjugations
+    - Future tense conjugations
 
 #### Interaction Flow
 1. App displays a random verb in the selected source language
@@ -54,15 +83,17 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - **HTML/CSS/JavaScript**: No framework dependencies for maximum simplicity
 - **CSS Animations**: Pure CSS for the timer animation using keyframes
 - **Local Storage**: Persists user settings between sessions
-- **Data Structure**: Simple JSON array of verb pairs
+- **Data Structure**: 
+  - Simple JSON array of verb pairs
+  - Conjugation system with support for regular and irregular verbs
 - **Responsive Design**: Mobile-friendly layout that works on various screen sizes
 - **Theme System**: Dark/light mode with system preference detection using CSS variables
 - **Adaptive Text**: Dynamic font sizing to ensure content fits within cards
 
 ## Future Enhancements
-- Expanded content (phrases, different tenses, topics)
+- Expanded content (phrases, additional tenses, topics)
 - Additional settings:
-  - Content categories (top 10/100 verbs, past tense, questions, etc.)
+  - Content categories (top 10/100 verbs, questions, etc.)
   - Additional visual theme options
   - Animation speed preferences
 - Support for more complex grammatical structures
@@ -75,7 +106,9 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - **HTML Structure**: Semantic markup with clear separation of components
 - **CSS**: Modern CSS with animations, flexbox layout, and CSS variables for theming
 - **JavaScript**: Vanilla JS with event listeners and timeout management
-- **Data Management**: Vocabulary stored in a separate data.js file for easy expansion
+- **Data Management**: 
+  - Vocabulary stored in a separate data.js file for easy expansion
+  - Verb conjugations managed through a combination of predefined irregular forms and algorithmic generation for regular verbs
 - **Animation**: CSS-based spinning timer with counter-rotation for the play/pause icon
 - **Settings**: User preferences stored in localStorage as JSON
 - **Responsive Text**: Algorithm to dynamically resize text based on content length

@@ -302,24 +302,30 @@ function showNextCard() {
     // Reset state
     isShowingAnswer = false;
     
+    // Clear the answer content immediately to prevent it from being visible
+    cardBack.textContent = '';
+    
     // Hide the back of the card
     cardBack.classList.remove('revealed');
     
-    // Get random entry from dictionary
-    const randomIndex = Math.floor(Math.random() * dictionary.length);
-    const entry = dictionary[randomIndex];
-    
-    // Determine which content type to show
-    let selectedContentType;
-    if (settings.contentTypes.length === 1) {
-        // If only one content type is selected, use that
-        selectedContentType = settings.contentTypes[0];
-    } else {
-        // If multiple content types are selected, choose one randomly
-        selectedContentType = settings.contentTypes[Math.floor(Math.random() * settings.contentTypes.length)];
-    }
-    
-    let frontText, backText;
+    // First, wait for the slide-down animation to complete
+    // The CSS transition for the card-back is 0.3s, so we wait a bit longer
+    setTimeout(() => {
+        // Now prepare the next card data but don't update the front yet
+        const randomIndex = Math.floor(Math.random() * dictionary.length);
+        const entry = dictionary[randomIndex];
+        
+        // Determine which content type to show
+        let selectedContentType;
+        if (settings.contentTypes.length === 1) {
+            // If only one content type is selected, use that
+            selectedContentType = settings.contentTypes[0];
+        } else {
+            // If multiple content types are selected, choose one randomly
+            selectedContentType = settings.contentTypes[Math.floor(Math.random() * settings.contentTypes.length)];
+        }
+        
+        let frontText, backText;
     
     if (selectedContentType === 'infinitive') {
         // Handle infinitive form (original behavior)
@@ -405,36 +411,43 @@ function showNextCard() {
         }
     }
     
-    cardFront.textContent = frontText;
-    cardBack.textContent = backText;
-    
-    // Resize text to fit container
-    resizeText(cardFront);
-    
-    // Update timer duration - use half the time for each phase
-    timer.style.setProperty('--duration', settings.flipTime / 2);
-    
-    // If we were paused, stay paused
-    if (isPaused) {
-        document.querySelector('.timer').classList.add('paused');
-        return;
-    }
-    
-    // Start the first timer (question phase) - 5 seconds
-    flipTimer = startTimer(settings.flipTime / 2, () => {
-        // Reveal the answer
-        cardBack.classList.add('revealed');
-        isShowingAnswer = true;
+        // Only update the card back text first (while it's hidden)
+        cardBack.textContent = backText;
         
-        // Resize the answer text
-        resizeText(cardBack);
-        
-        // Start the second timer (answer phase) - 5 seconds
-        nextCardTimer = startTimer(settings.flipTime / 2, () => {
-            // Move to next card
-            showNextCard();
-        });
-    });
+        // Now update the front card content after a small delay
+        // This ensures the user doesn't see the new question until the answer is fully hidden
+        setTimeout(() => {
+            cardFront.textContent = frontText;
+            
+            // Resize text to fit container
+            resizeText(cardFront);
+            
+            // Update timer duration - use half the time for each phase
+            timer.style.setProperty('--duration', settings.flipTime / 2);
+            
+            // If we were paused, stay paused
+            if (isPaused) {
+                document.querySelector('.timer').classList.add('paused');
+                return;
+            }
+            
+            // Start the first timer (question phase) - 5 seconds
+            flipTimer = startTimer(settings.flipTime / 2, () => {
+                // Reveal the answer
+                cardBack.classList.add('revealed');
+                isShowingAnswer = true;
+                
+                // Resize the answer text
+                resizeText(cardBack);
+                
+                // Start the second timer (answer phase) - 5 seconds
+                nextCardTimer = startTimer(settings.flipTime / 2, () => {
+                    // Move to next card
+                    showNextCard();
+                });
+            });
+        }, 100); // Small delay to ensure the front card updates after the back card is hidden
+    }, 350); // Wait for slide-down animation to complete (300ms transition + 50ms buffer)
 }
 
 // Initialize first card
