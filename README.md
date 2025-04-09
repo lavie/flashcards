@@ -12,15 +12,17 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 
 ### Core Features (Implemented)
 - Simple flashcard system showing Portuguese verbs and their English translations
-- Cards flip automatically after a set time (default: 10 seconds)
+- Cards flip automatically after a set time (configurable from 3-20 seconds)
 - Support for both EN-PT and PT-EN directions
 - Random selection from a dictionary of common verbs
 - Minimalistic interface that works well on mobile devices
-- Pure CSS circular timer animation that visualizes the countdown
+- Simple spinning timer animation that visualizes the countdown
 - Settings panel with customizable options
 - Persistent settings using localStorage
 - Fullscreen mode for distraction-free learning
 - Dark mode with system preference detection and manual theme selection
+- Play/pause functionality with visual icon toggle
+- Dynamic text resizing to accommodate longer translations
 
 ### Technical Implementation Details
 
@@ -30,19 +32,20 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
   - Bottom half contains the translation (hidden initially, revealed after delay)
 - **Circular Timer**: 
   - Visual indicator showing time remaining before card flip
-  - Implemented using pure CSS animations (no JavaScript timers for the visual effect)
-  - Completes one full rotation during question phase, then another during answer phase
+  - Implemented using CSS animations with a spinning circle and small gap
   - Features play/pause button with toggle between pause and play icons
+  - Each phase (question and answer) gets equal time
 - **Settings Panel**: 
   - Accessible via gear icon in top-right corner
   - Allows changing translation direction (EN→PT or PT→EN)
-  - Customizable flip timing (1-60 seconds)
+  - Mobile-friendly slider for customizable flip timing (3-20 seconds)
+  - Theme selection (system default, light, or dark)
 
 #### Interaction Flow
 1. App displays a random verb in the selected source language
 2. Circular timer begins countdown animation
-3. After the set time elapses, the translation is revealed
-4. Timer continues for the same duration to allow reading the answer
+3. After half the set time elapses (e.g., 5 seconds for a 10-second setting), the translation is revealed
+4. Timer continues for the remaining half of the time to allow reading the answer
 5. Process repeats with a new random verb
 6. User can click the timer to pause/resume the countdown (icon toggles between pause/play)
 7. Double-click the timer to manually advance to the next step
@@ -54,6 +57,7 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - **Data Structure**: Simple JSON array of verb pairs
 - **Responsive Design**: Mobile-friendly layout that works on various screen sizes
 - **Theme System**: Dark/light mode with system preference detection using CSS variables
+- **Adaptive Text**: Dynamic font sizing to ensure content fits within cards
 
 ## Future Enhancements
 - Expanded content (phrases, different tenses, topics)
@@ -72,8 +76,9 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - **CSS**: Modern CSS with animations, flexbox layout, and CSS variables for theming
 - **JavaScript**: Vanilla JS with event listeners and timeout management
 - **Data Management**: Vocabulary stored in a separate data.js file for easy expansion
-- **Animation**: CSS-based circular timer using webkit keyframes and transforms with interactive pause/play functionality
+- **Animation**: CSS-based spinning timer with counter-rotation for the play/pause icon
 - **Settings**: User preferences stored in localStorage as JSON
+- **Responsive Text**: Algorithm to dynamically resize text based on content length
 
 ## Deployment
 
