@@ -149,10 +149,10 @@ button:hover {
     }
     50.01% {
         background: #4CAF50;
-        -webkit-transform: rotate(0deg);
+        -webkit-transform: rotate(-180deg);
     }
     100% {
         background: #4CAF50;
-        -webkit-transform: rotate(-180deg);
+        -webkit-transform: rotate(-360deg);
     }
 }
