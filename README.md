@@ -20,6 +20,7 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - Settings panel with customizable options
 - Persistent settings using localStorage
 - Fullscreen mode for distraction-free learning
+- Dark mode with system preference detection and manual theme selection
 
 ### Technical Implementation Details
 
@@ -50,12 +51,13 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - **Local Storage**: Persists user settings between sessions
 - **Data Structure**: Simple JSON array of verb pairs
 - **Responsive Design**: Mobile-friendly layout that works on various screen sizes
+- **Theme System**: Dark/light mode with system preference detection using CSS variables
 
 ## Future Enhancements
 - Expanded content (phrases, different tenses, topics)
 - Additional settings:
   - Content categories (top 10/100 verbs, past tense, questions, etc.)
-  - Visual theme options
+  - Additional visual theme options
   - Animation speed preferences
 - Support for more complex grammatical structures
 - Spaced repetition algorithm for optimized learning
@@ -65,7 +67,7 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 
 ### Implementation Details
 - **HTML Structure**: Semantic markup with clear separation of components
-- **CSS**: Modern CSS with animations, flexbox layout, and CSS variables
+- **CSS**: Modern CSS with animations, flexbox layout, and CSS variables for theming
 - **JavaScript**: Vanilla JS with event listeners and timeout management
 - **Data Management**: Vocabulary stored in a separate data.js file for easy expansion
 - **Animation**: CSS-based circular timer using webkit keyframes and transforms
