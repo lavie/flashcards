@@ -184,7 +184,7 @@ button:hover {
     height: 40px;
     background: -webkit-linear-gradient(left, var(--timer-color-1) 50%, var(--timer-color-2) 50%);
     border-radius: 100%;
-    -webkit-animation: time calc(var(--duration) * 1s) steps(1000, start) infinite;
+    -webkit-animation: time calc(var(--duration) * 2s) steps(1000, start) infinite;
     -webkit-animation-play-state: running;
     transition: background 0.3s ease;
     cursor: pointer;
@@ -233,7 +233,7 @@ button:hover {
     position: absolute;
     top: 0;
     width: 50%;
-    -webkit-animation: mask calc(var(--duration) * 1s) steps(500, start) infinite;
+    -webkit-animation: mask calc(var(--duration) * 2s) steps(500, start) infinite;
     -webkit-animation-play-state: running;
     -webkit-transform-origin: 100% 50%;
 }
@@ -243,6 +243,9 @@ button:hover {
 }
 
 @-webkit-keyframes time {
+    50% {
+        -webkit-transform: rotate(180deg);
+    }
     100% {
         -webkit-transform: rotate(360deg);
     }
@@ -253,11 +256,11 @@ button:hover {
         background: var(--timer-color-2);
         -webkit-transform: rotate(0deg);
     }
-    49.99% {
+    50% {
         background: var(--timer-color-2);
         -webkit-transform: rotate(-180deg);
     }
-    50% {
+    50.01% {
         background: var(--timer-color-1);
         -webkit-transform: rotate(-180deg);
     }
