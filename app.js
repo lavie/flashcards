@@ -150,7 +150,7 @@ function showNextCard() {
         return;
     }
     
-    // Start the first timer (question phase)
+    // Start the first timer (question phase) - first half of animation
     flipTimer = startTimer(settings.flipTime, () => {
         // Reveal the answer
         cardBack.classList.add('revealed');
@@ -159,7 +159,7 @@ function showNextCard() {
         // Resize the answer text
         resizeText(cardBack);
         
-        // Start the second timer (answer phase)
+        // Start the second timer (answer phase) - second half of animation
         nextCardTimer = startTimer(settings.flipTime, () => {
             // Move to next card
             showNextCard();
