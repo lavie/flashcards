@@ -199,7 +199,6 @@ function togglePause() {
     if (isPaused) {
         // Pause timers
         timerElement.classList.add('paused');
-        timerIcon.textContent = "▶️";
         if (flipTimer) {
             clearTimeout(flipTimer);
             flipTimer = null;
@@ -211,7 +210,6 @@ function togglePause() {
     } else {
         // Resume timers
         timerElement.classList.remove('paused');
-        timerIcon.textContent = "⏸️";
         
         // Calculate remaining time based on animation progress
         const computedStyle = window.getComputedStyle(timerElement);
