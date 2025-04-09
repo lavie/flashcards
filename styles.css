@@ -107,11 +107,28 @@ button:hover {
     transform: translateY(0);
 }
 
-.controls {
+.timer {
     position: absolute;
     bottom: 20px;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+}
+
+.timer-circle {
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.timer-background {
+    stroke: #ddd;
+}
+
+.timer-progress {
+    stroke: #4CAF50;
+    transform-origin: center;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset linear;
 }

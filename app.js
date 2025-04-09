@@ -1,7 +1,7 @@
 // DOM Elements
 const cardFront = document.getElementById('cardFront');
 const cardBack = document.getElementById('cardBack');
-const nextButton = document.getElementById('nextButton');
+const timerProgress = document.getElementById('timerProgress');
 const settingsToggle = document.getElementById('settingsToggle');
 const settingsPanel = document.getElementById('settingsPanel');
 const directionSelect = document.getElementById('direction');
@@ -21,8 +21,15 @@ if (localStorage.getItem('flashcardSettings')) {
     flipTimeInput.value = settings.flipTime;
 }
 
-// Timer for card flipping
+// Timers
 let flipTimer;
+let nextCardTimer;
+let isShowingAnswer = false;
+
+// Timer animation
+const TIMER_CIRCUMFERENCE = 2 * Math.PI * 16; // 2πr where r=16 (from SVG)
+timerProgress.style.strokeDasharray = TIMER_CIRCUMFERENCE;
+timerProgress.style.strokeDashoffset = TIMER_CIRCUMFERENCE;
 
 // Toggle settings panel
 settingsToggle.addEventListener('click', () => {
@@ -44,12 +51,38 @@ applySettingsButton.addEventListener('click', () => {
     showNextCard();
 });
 
+// Start timer animation
+function startTimerAnimation(duration, callback) {
+    // Reset timer state
+    let startTime = null;
+    const totalTime = duration * 1000;
+    
+    // Reset the circle
+    timerProgress.style.transition = 'none';
+    timerProgress.style.strokeDashoffset = TIMER_CIRCUMFERENCE;
+    
+    // Force reflow to make sure the transition is reset
+    void timerProgress.offsetWidth;
+    
+    // Start the animation
+    timerProgress.style.transition = `stroke-dashoffset ${totalTime}ms linear`;
+    timerProgress.style.strokeDashoffset = 0;
+    
+    return setTimeout(callback, totalTime);
+}
+
 // Show next card
 function showNextCard() {
-    // Clear any existing timer
+    // Clear any existing timers
     if (flipTimer) {
         clearTimeout(flipTimer);
     }
+    if (nextCardTimer) {
+        clearTimeout(nextCardTimer);
+    }
+    
+    // Reset state
+    isShowingAnswer = false;
     
     // Hide the back of the card
     cardBack.classList.remove('revealed');
@@ -67,14 +100,42 @@ function showNextCard() {
         cardBack.textContent = entry.english;
     }
     
-    // Set timer to reveal the back of the card
-    flipTimer = setTimeout(() => {
+    // Start the first timer animation (question phase)
+    flipTimer = startTimerAnimation(settings.flipTime, () => {
+        // Reveal the answer
         cardBack.classList.add('revealed');
-    }, settings.flipTime * 1000);
+        isShowingAnswer = true;
+        
+        // Start the second timer animation (answer phase)
+        nextCardTimer = startTimerAnimation(settings.flipTime, () => {
+            // Move to next card
+            showNextCard();
+        });
+    });
 }
-
-// Next button event
-nextButton.addEventListener('click', showNextCard);
 
 // Initialize first card
 showNextCard();
+
+// Allow clicking on the timer to manually advance
+document.querySelector('.timer').addEventListener('click', () => {
+    if (isShowingAnswer) {
+        // If answer is showing, go to next card
+        showNextCard();
+    } else {
+        // If question is showing, reveal answer
+        if (flipTimer) {
+            clearTimeout(flipTimer);
+        }
+        cardBack.classList.add('revealed');
+        isShowingAnswer = true;
+        
+        // Start the answer phase timer
+        if (nextCardTimer) {
+            clearTimeout(nextCardTimer);
+        }
+        nextCardTimer = startTimerAnimation(settings.flipTime, () => {
+            showNextCard();
+        });
+    }
+});
