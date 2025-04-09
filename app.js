@@ -155,12 +155,16 @@ function formatEnglishPrompt(infinitive, tense, person) {
     const pronounMap = {
         'eu': 'I',
         'tu': 'you',
-        'ele_ela_você': 'he/she/you',
+        'ele_ela_você': ['he', 'she', 'you'],
         'nós': 'we',
-        'eles_elas_vocês': 'they/you all'
+        'eles_elas_vocês': ['they', 'you all']
     };
     
-    const pronoun = pronounMap[person] || person;
+    // Get a random pronoun if there are multiple options
+    let pronoun = pronounMap[person] || person;
+    if (Array.isArray(pronoun)) {
+        pronoun = pronoun[Math.floor(Math.random() * pronoun.length)];
+    }
     
     // Format based on tense
     switch(tense) {
@@ -288,22 +292,32 @@ function showNextCard() {
         // Get the conjugated form
         const conjugatedForm = verbConjugations[tense][randomPerson];
         
+        // Format the Portuguese person display
+        let displayPerson = randomPerson;
+        if (randomPerson === 'ele_ela_você') {
+            const options = ['ele', 'ela', 'você'];
+            displayPerson = options[Math.floor(Math.random() * options.length)];
+        } else if (randomPerson === 'eles_elas_vocês') {
+            const options = ['eles', 'elas', 'vocês'];
+            displayPerson = options[Math.floor(Math.random() * options.length)];
+        }
+        
         // Format the display text
         if (settings.direction === 'random') {
             // Randomly choose direction for this card
             const randomDirection = Math.random() < 0.5 ? 'en-pt' : 'pt-en';
             if (randomDirection === 'en-pt') {
                 frontText = formatEnglishPrompt(entry.en, tense, randomPerson);
-                backText = `${randomPerson} ${conjugatedForm}`;
+                backText = `${displayPerson} ${conjugatedForm}`;
             } else {
-                frontText = `${randomPerson} ${conjugatedForm}`;
+                frontText = `${displayPerson} ${conjugatedForm}`;
                 backText = formatEnglishPrompt(entry.en, tense, randomPerson);
             }
         } else if (settings.direction === 'en-pt') {
             frontText = formatEnglishPrompt(entry.en, tense, randomPerson);
-            backText = `${randomPerson} ${conjugatedForm}`;
+            backText = `${displayPerson} ${conjugatedForm}`;
         } else {
-            frontText = `${randomPerson} ${conjugatedForm}`;
+            frontText = `${displayPerson} ${conjugatedForm}`;
             backText = formatEnglishPrompt(entry.en, tense, randomPerson);
         }
     }
