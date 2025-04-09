@@ -11,6 +11,7 @@
     --button-text: white;
     --timer-color-1: #4CAF50;
     --timer-color-2: #ddd;
+    --timer-icon-bg: white;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,6 +28,7 @@
         --button-text: white;
         --timer-color-1: #2ecc71;
         --timer-color-2: #555;
+        --timer-icon-bg: #333;
     }
 }
 
@@ -43,6 +45,7 @@
     --button-text: white;
     --timer-color-1: #2ecc71;
     --timer-color-2: #555;
+    --timer-icon-bg: #333;
 }
 
 * {
@@ -196,13 +199,13 @@ button:hover {
     transform: translate(-50%, -50%);
     width: 20px;
     height: 20px;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--timer-icon-bg);
     border-radius: 50%;
     z-index: 2;
     -webkit-mask-image: none;
     mask-image: none;
     opacity: 1;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, background-color 0.3s ease;
     background-image: url('pause.svg');
     background-repeat: no-repeat;
     background-position: center;
