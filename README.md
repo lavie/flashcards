@@ -69,3 +69,18 @@ The MVP (Minimum Viable Product) has been successfully implemented with the foll
 - **Data Management**: Vocabulary stored in a separate data.js file for easy expansion
 - **Animation**: CSS-based circular timer using webkit keyframes and transforms
 - **Settings**: User preferences stored in localStorage as JSON
+
+## Deployment
+
+This is a static web application that can be deployed on any static web hosting service:
+
+### GitHub Pages
+1. Push the code to a GitHub repository
+2. Go to repository Settings > Pages
+3. Select the branch to deploy (usually "main")
+4. The site will be available at `https://username.github.io/repository-name`
+
+### Netlify (Alternative)
+1. Go to [Netlify Drop](https://app.netlify.com/drop)
+2. Drag and drop the project folder
+3. Get an instant deployment with a Netlify subdomain
