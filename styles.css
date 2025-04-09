@@ -205,11 +205,15 @@ button:hover {
     -webkit-mask-image: none;
     mask-image: none;
     opacity: 1;
-    transition: opacity 0.2s ease, background-color 0.3s ease;
+    transition: opacity 0.2s ease, background-color 0.3s ease, background-image 0.2s ease;
     background-image: url('pause.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+}
+
+.timer.paused .timer-icon {
+    background-image: url('play.svg');
 }
 
 .timer:hover .timer-icon {

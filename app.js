@@ -194,7 +194,6 @@ document.querySelector('.timer').addEventListener('click', () => {
 function togglePause() {
     isPaused = !isPaused;
     const timerElement = document.querySelector('.timer');
-    const timerIcon = document.querySelector('.timer-icon');
     
     if (isPaused) {
         // Pause timers
