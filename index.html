@@ -35,14 +35,25 @@
                 </select>
             </div>
             <div class="setting">
-                <label for="contentType">Content Type:</label>
-                <select id="contentType">
-                    <option value="infinitive">Infinitives Only</option>
-                    <option value="present">Present Tense</option>
-                    <option value="preterite">Past Tense (Preterite)</option>
-                    <option value="future">Future Tense</option>
-                    <option value="mixed">Mixed (All Forms)</option>
-                </select>
+                <label>Content Types:</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="infinitiveCheck" name="contentType" value="infinitive" checked>
+                        <label for="infinitiveCheck">Infinitives</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="presentCheck" name="contentType" value="present">
+                        <label for="presentCheck">Present Tense</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="preteriteCheck" name="contentType" value="preterite">
+                        <label for="preteriteCheck">Past Tense (Preterite)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="futureCheck" name="contentType" value="future">
+                        <label for="futureCheck">Future Tense</label>
+                    </div>
+                </div>
             </div>
             <div class="setting" id="personSettingContainer">
                 <label for="person">Person:</label>

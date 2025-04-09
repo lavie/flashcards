@@ -9,7 +9,7 @@ const directionSelect = document.getElementById('direction');
 const flipTimeInput = document.getElementById('flipTime');
 const flipTimeValue = document.getElementById('flipTimeValue');
 const themeSelect = document.getElementById('theme');
-const contentTypeSelect = document.getElementById('contentType');
+const contentTypeCheckboxes = document.querySelectorAll('input[name="contentType"]');
 const personSettingContainer = document.getElementById('personSettingContainer');
 const personSelect = document.getElementById('person');
 const applySettingsButton = document.getElementById('applySettings');
@@ -19,7 +19,7 @@ let settings = {
     direction: 'en-pt',
     flipTime: 10,
     theme: 'system',
-    contentType: 'infinitive',
+    contentTypes: ['infinitive'],
     person: 'random'
 };
 
@@ -37,10 +37,16 @@ if (localStorage.getItem('flashcardSettings')) {
     settings.theme = settings.theme || 'system';
     themeSelect.value = settings.theme;
     
-    // Set content type and person or default if not previously set
-    settings.contentType = settings.contentType || 'infinitive';
+    // Set content types or default if not previously set
+    settings.contentTypes = settings.contentTypes || ['infinitive'];
+    
+    // Update checkboxes based on settings
+    contentTypeCheckboxes.forEach(checkbox => {
+        checkbox.checked = settings.contentTypes.includes(checkbox.value);
+    });
+    
+    // Set person or default if not previously set
     settings.person = settings.person || 'random';
-    contentTypeSelect.value = settings.contentType;
     personSelect.value = settings.person;
 }
 
@@ -83,7 +89,21 @@ applySettingsButton.addEventListener('click', () => {
     settings.direction = directionSelect.value;
     settings.flipTime = parseInt(flipTimeInput.value);
     settings.theme = themeSelect.value;
-    settings.contentType = contentTypeSelect.value;
+    
+    // Get selected content types from checkboxes
+    settings.contentTypes = [];
+    contentTypeCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            settings.contentTypes.push(checkbox.value);
+        }
+    });
+    
+    // If no content types are selected, default to infinitive
+    if (settings.contentTypes.length === 0) {
+        settings.contentTypes = ['infinitive'];
+        document.getElementById('infinitiveCheck').checked = true;
+    }
+    
     settings.person = personSelect.value;
     
     // Apply theme
@@ -102,19 +122,22 @@ applySettingsButton.addEventListener('click', () => {
     showNextCard();
 });
 
-// Toggle person setting visibility based on content type
-contentTypeSelect.addEventListener('change', () => {
-    if (contentTypeSelect.value === 'infinitive') {
-        personSettingContainer.style.display = 'none';
-    } else {
-        personSettingContainer.style.display = 'block';
-    }
+// Toggle person setting visibility based on content types
+function updatePersonSettingVisibility() {
+    const hasConjugations = Array.from(contentTypeCheckboxes).some(checkbox => 
+        checkbox.checked && checkbox.value !== 'infinitive'
+    );
+    
+    personSettingContainer.style.display = hasConjugations ? 'block' : 'none';
+}
+
+// Add event listeners to all content type checkboxes
+contentTypeCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', updatePersonSettingVisibility);
 });
 
 // Initialize person setting visibility
-if (settings.contentType === 'infinitive') {
-    personSettingContainer.style.display = 'none';
-}
+updatePersonSettingVisibility();
 
 // Helper function to start a timer and execute callback when done
 function startTimer(duration, callback) {

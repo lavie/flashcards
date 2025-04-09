@@ -127,6 +127,25 @@ body {
     padding: 8px;
 }
 
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.checkbox-item label {
+    margin-bottom: 0;
+}
+
 .slider {
     -webkit-appearance: none;
     width: 100%;
