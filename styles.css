@@ -180,9 +180,57 @@ button:hover {
     background: -webkit-linear-gradient(left, var(--timer-color-1) 50%, var(--timer-color-2) 50%);
     border-radius: 100%;
     -webkit-animation: time calc(var(--duration) * 1s) steps(1000, start) infinite;
+    -webkit-animation-play-state: running;
     -webkit-mask: radial-gradient(transparent 50%, #000 50%);
     mask: radial-gradient(transparent 50%, #000 50%);
     transition: background 0.3s ease;
+    cursor: pointer;
+}
+
+.timer.paused {
+    -webkit-animation-play-state: paused;
+}
+
+.timer::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border-radius: 50%;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.timer:hover::before {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.timer::after {
+    content: "⏸️";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: white;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.timer:hover::after {
+    opacity: 1;
+}
+
+.timer.paused::after {
+    content: "▶️";
+    opacity: 1;
 }
 
 .timer-mask {
@@ -193,7 +241,12 @@ button:hover {
     top: 0;
     width: 50%;
     -webkit-animation: mask calc(var(--duration) * 1s) steps(500, start) infinite;
+    -webkit-animation-play-state: running;
     -webkit-transform-origin: 100% 50%;
+}
+
+.timer.paused .timer-mask {
+    -webkit-animation-play-state: paused;
 }
 
 @-webkit-keyframes time {

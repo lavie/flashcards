@@ -17,6 +17,9 @@ let settings = {
     theme: 'system'
 };
 
+// Timer state
+let isPaused = false;
+
 // Load settings from localStorage if available
 if (localStorage.getItem('flashcardSettings')) {
     settings = JSON.parse(localStorage.getItem('flashcardSettings'));
@@ -116,6 +119,12 @@ function showNextCard() {
     // Update timer duration
     timer.style.setProperty('--duration', settings.flipTime);
     
+    // If we were paused, stay paused
+    if (isPaused) {
+        document.querySelector('.timer').classList.add('paused');
+        return;
+    }
+    
     // Start the first timer (question phase)
     flipTimer = startTimer(settings.flipTime, () => {
         // Reveal the answer
@@ -176,8 +185,66 @@ function updateFullscreenButton() {
     }
 }
 
-// Allow clicking on the timer to manually advance
-document.querySelector('.timer').addEventListener('click', () => {
+// Allow clicking on the timer to toggle pause or advance
+document.querySelector('.timer').addEventListener('click', (e) => {
+    // Toggle pause/play when clicking
+    if (e.target.classList.contains('timer') || e.target === document.querySelector('.timer::before') || e.target === document.querySelector('.timer::after')) {
+        togglePause();
+        return;
+    }
+});
+
+// Function to toggle pause state
+function togglePause() {
+    isPaused = !isPaused;
+    const timerElement = document.querySelector('.timer');
+    
+    if (isPaused) {
+        // Pause timers
+        timerElement.classList.add('paused');
+        if (flipTimer) {
+            clearTimeout(flipTimer);
+            flipTimer = null;
+        }
+        if (nextCardTimer) {
+            clearTimeout(nextCardTimer);
+            nextCardTimer = null;
+        }
+    } else {
+        // Resume timers
+        timerElement.classList.remove('paused');
+        
+        // Calculate remaining time based on animation progress
+        const computedStyle = window.getComputedStyle(timerElement);
+        const animationName = computedStyle.getPropertyValue('animation-name');
+        const animationDuration = parseFloat(computedStyle.getPropertyValue('animation-duration'));
+        const animationDelay = parseFloat(computedStyle.getPropertyValue('animation-delay'));
+        
+        // Restart appropriate timer based on current state
+        if (isShowingAnswer) {
+            nextCardTimer = startTimer(settings.flipTime, () => {
+                showNextCard();
+            });
+        } else {
+            flipTimer = startTimer(settings.flipTime, () => {
+                cardBack.classList.add('revealed');
+                isShowingAnswer = true;
+                
+                nextCardTimer = startTimer(settings.flipTime, () => {
+                    showNextCard();
+                });
+            });
+        }
+    }
+}
+
+// Double-click to advance card
+document.querySelector('.timer').addEventListener('dblclick', () => {
+    if (isPaused) {
+        // If paused, just unpause first
+        togglePause();
+    }
+    
     if (isShowingAnswer) {
         // If answer is showing, go to next card
         showNextCard();
